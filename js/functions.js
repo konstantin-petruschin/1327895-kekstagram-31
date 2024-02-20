@@ -1,5 +1,7 @@
 const checkLengthString = (string, maxLength) => string.length <= maxLength;
 
+checkLengthString('проверяемая строка', 20);
+
 // Примеры использования функции
 // console.log(checkLengthString('проверяемая строка', 20)); // true
 // console.log(checkLengthString('проверяемая строка', 18)); // true
@@ -13,6 +15,8 @@ function checkPalindrome(string) {
   }
   return newString === normalizeString;
 }
+
+checkPalindrome('топот');
 
 // console.log(checkPalindrome('топот')); // true
 // console.log(checkPalindrome('ДовОд')); // true
@@ -31,6 +35,8 @@ function selectNumbers (string) {
   }
   return getNumber ? parseInt(getNumber, 10) : NaN;
 }
+
+selectNumbers ('агент 007');
 
 // console.log(selectNumbers(2023));
 // console.log(selectNumbers(-1));
