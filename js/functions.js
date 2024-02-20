@@ -14,7 +14,6 @@ function checkPalindrome(string) {
   return newString === normalizeString;
 }
 
-
 console.log(checkPalindrome('топот')); // true
 console.log(checkPalindrome('ДовОд')); // true
 console.log(checkPalindrome('Кекс')); // false
