@@ -1,9 +1,9 @@
 const checkLengthString = (string, maxLength) => string.length <= maxLength;
 
 // Примеры использования функции
-console.log(checkLengthString('проверяемая строка', 20)); // true
-console.log(checkLengthString('проверяемая строка', 18)); // true
-console.log(checkLengthString('проверяемая строка', 10)); // false
+// console.log(checkLengthString('проверяемая строка', 20)); // true
+// console.log(checkLengthString('проверяемая строка', 18)); // true
+// console.log(checkLengthString('проверяемая строка', 10)); // false
 
 function checkPalindrome(string) {
   const normalizeString = string.replaceAll(' ', '').toUpperCase();
@@ -14,10 +14,10 @@ function checkPalindrome(string) {
   return newString === normalizeString;
 }
 
-console.log(checkPalindrome('топот')); // true
-console.log(checkPalindrome('ДовОд')); // true
-console.log(checkPalindrome('Кекс')); // false
-console.log(checkPalindrome('Лёша на полке клопа нашёл ')); // true
+// console.log(checkPalindrome('топот')); // true
+// console.log(checkPalindrome('ДовОд')); // true
+// console.log(checkPalindrome('Кекс')); // false
+// console.log(checkPalindrome('Лёша на полке клопа нашёл ')); // true
 
 function selectNumbers (string) {
   if (typeof string === 'number') {
@@ -32,12 +32,12 @@ function selectNumbers (string) {
   return getNumber ? parseInt(getNumber, 10) : NaN;
 }
 
-console.log(selectNumbers(2023));
-console.log(selectNumbers(-1));
-console.log(selectNumbers(1.5));
-console.log(selectNumbers('2023 год'));
-console.log(selectNumbers('ECMAScript 2022'));
-console.log(selectNumbers('1 кефир, 0.5 батона'));
-console.log(selectNumbers('агент 007'));
-console.log(selectNumbers('а я томат'));
+// console.log(selectNumbers(2023));
+// console.log(selectNumbers(-1));
+// console.log(selectNumbers(1.5));
+// console.log(selectNumbers('2023 год'));
+// console.log(selectNumbers('ECMAScript 2022'));
+// console.log(selectNumbers('1 кефир, 0.5 батона'));
+// console.log(selectNumbers('агент 007'));
+// console.log(selectNumbers('а я томат'));
 
