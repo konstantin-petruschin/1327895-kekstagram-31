@@ -36,7 +36,7 @@ function selectNumbers (string) {
   return getNumber ? parseInt(getNumber, 10) : NaN;
 }
 
-selectNumbers ('агент 007');
+selectNumbers ('а я томат');
 
 // console.log(selectNumbers(2023));
 // console.log(selectNumbers(-1));
