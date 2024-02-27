@@ -63,28 +63,29 @@ MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const SIMILAR_USERS_COUNT = 25;
+const SIMILAR_USERS_COUNT = 25; // изменить имя на связанное с фото
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
 const MIN_NUMBER_COMMENTS = 0;
-const MAX_NUMBER_COMMENTS = 300;
+const MAX_NUMBER_COMMENTS = 30;
 const MIN_NUMBER_AVATAR = 1;
 const MAX_NUMBER_AVATAR = 6;
 
 
-const getRandomPostiveInteger = (a, b) => {
+const getRandomNumber = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.ceil(Math.max(Math.abs(a), Math.abs(b)));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 };
 
-const getRandomArrayElement = (elements) => elements[getRandomPostiveInteger(0, elements.length - 1)];
+const getRandomArrayElement = (elements) => elements[getRandomNumber(MIN_NUMBER_COMMENTS, elements.length - 1)];
+
 
 // Создаем массив с обьектамию тут будут коментарии к фото
 // схема массива - множество объектов со структурой - это пользователи, которые комментируют фотографии
 // {
-//   id: 135,
+//   id: 135, число не должно повторяться
 //   avatar: 'img/avatar-6.svg',
 //   message: 'В целом всё неплохо. Но не всё.',
 //   name: 'Артём',
@@ -98,13 +99,22 @@ const getRandomArrayElement = (elements) => elements[getRandomPostiveInteger(0, 
 // likes - количество лайков;
 // comments - вложенный массив, его струкрура уже есть
 
-const createUsers = () => ({
-  id: '',
+const createPhoto = () => ({
+  id: '' ,
   url: '',
   description: '',
-  likes: '',
+  likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
+  comments: '', // вставить массив с объектами из createUsers
+
+  // число комментариев должно быть рандомным от 1 до 30
+});
+
+
+const createUsers = () => ({
+  url: '',
+  avatar: `img/avatar-${getRandomNumber(MIN_NUMBER_AVATAR, MAX_NUMBER_AVATAR)}.svg`,
   message: getRandomArrayElement(MESSAGES),
-  name: getRandomArrayElement(NAMES)
+  name: getRandomArrayElement(NAMES),
 });
 
 const similarUsers = Array.from({length: SIMILAR_USERS_COUNT}, createUsers);
