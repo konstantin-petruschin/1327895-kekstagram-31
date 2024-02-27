@@ -54,11 +54,59 @@ const DESCRIPTION = [
   'Белый внедорожник, проезжающий мимо бегемотов'
 ];
 
-MESSAGE = [
+MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
-]
+];
+
+const SIMILAR_USERS_COUNT = 25;
+const MIN_LIKES = 15;
+const MAX_LIKES = 200;
+const MIN_NUMBER_COMMENTS = 0;
+const MAX_NUMBER_COMMENTS = 300;
+const MIN_NUMBER_AVATAR = 1;
+const MAX_NUMBER_AVATAR = 6;
+
+
+const getRandomPostiveInteger = (a, b) => {
+  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
+  const upper = Math.ceil(Math.max(Math.abs(a), Math.abs(b)));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
+
+const getRandomArrayElement = (elements) => elements[getRandomPostiveInteger(0, elements.length - 1)];
+
+// Создаем массив с обьектамию тут будут коментарии к фото
+// схема массива - множество объектов со структурой - это пользователи, которые комментируют фотографии
+// {
+//   id: 135,
+//   avatar: 'img/avatar-6.svg',
+//   message: 'В целом всё неплохо. Но не всё.',
+//   name: 'Артём',
+// }
+
+
+// создаем объект со структурой:
+// id - число от 1 до 25;
+// url - адрес картинки с номероами;
+// description - описание фотографии;
+// likes - количество лайков;
+// comments - вложенный массив, его струкрура уже есть
+
+const createUsers = () => ({
+  id: '',
+  url: '',
+  description: '',
+  likes: '',
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(NAMES)
+});
+
+const similarUsers = Array.from({length: SIMILAR_USERS_COUNT}, createUsers);
+
+console.log(similarUsers);
