@@ -63,7 +63,7 @@ MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const SIMILAR_USERS_COUNT = 25; // изменить имя на связанное с фото
+const SIMILAR_PHOTO_POST = 25; // изменить имя на связанное с фото
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
 const MIN_NUMBER_COMMENTS = 0;
@@ -71,6 +71,13 @@ const MAX_NUMBER_COMMENTS = 30;
 const MIN_NUMBER_AVATAR = 1;
 const MAX_NUMBER_AVATAR = 6;
 
+const createId = () => {
+  let counter = 0;
+  return function () {
+    counter++;
+    return counter;
+  };
+};
 
 const getRandomNumber = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
@@ -80,8 +87,6 @@ const getRandomNumber = (a, b) => {
 };
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(MIN_NUMBER_COMMENTS, elements.length - 1)];
-
-
 // Создаем массив с обьектамию тут будут коментарии к фото
 // схема массива - множество объектов со структурой - это пользователи, которые комментируют фотографии
 // {
@@ -91,25 +96,12 @@ const getRandomArrayElement = (elements) => elements[getRandomNumber(MIN_NUMBER_
 //   name: 'Артём',
 // }
 
-
 // создаем объект со структурой:
 // id - число от 1 до 25;
 // url - адрес картинки с номероами;
 // description - описание фотографии;
 // likes - количество лайков;
 // comments - вложенный массив, его струкрура уже есть
-
-const createPhoto = () => ({
-  id: '' ,
-  url: '',
-  description: '',
-  likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-  comments: '', // вставить массив с объектами из createUsers
-
-  // число комментариев должно быть рандомным от 1 до 30
-});
-
-
 const createUsers = () => ({
   url: '',
   avatar: `img/avatar-${getRandomNumber(MIN_NUMBER_AVATAR, MAX_NUMBER_AVATAR)}.svg`,
@@ -117,6 +109,14 @@ const createUsers = () => ({
   name: getRandomArrayElement(NAMES),
 });
 
-const similarUsers = Array.from({length: SIMILAR_USERS_COUNT}, createUsers);
+const createPhotoPost = () => ({
+  id: createId(),
+  url: `photos/${createId(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENTS)}.jpg`,
+  description: '',
+  likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
+  comments:  Array.from({length:getRandomNumber(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENTS)}, createUsers)
+});
 
-console.log(similarUsers);
+const similarPhoto = Array.from({length: SIMILAR_PHOTO_POST}, createPhotoPost);
+
+console.log(similarPhoto);
