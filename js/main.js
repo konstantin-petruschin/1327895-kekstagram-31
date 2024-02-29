@@ -54,7 +54,7 @@ const DESCRIPTION = [
   'Белый внедорожник, проезжающий мимо бегемотов'
 ];
 
-MESSAGES = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -63,7 +63,7 @@ MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const SIMILAR_PHOTO_POST = 25; // изменить имя на связанное с фото
+const SIMILAR_PHOTO_POST = 25;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
 const MIN_NUMBER_COMMENTS = 0;
@@ -79,6 +79,10 @@ const createId = () => {
   };
 };
 
+const createIdPhoto = createId();
+const createUrlPhoto = createId();
+let descriptionIndex = 0;
+
 const getRandomNumber = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.ceil(Math.max(Math.abs(a), Math.abs(b)));
@@ -87,32 +91,18 @@ const getRandomNumber = (a, b) => {
 };
 
 const getRandomArrayElement = (elements) => elements[getRandomNumber(MIN_NUMBER_COMMENTS, elements.length - 1)];
-// Создаем массив с обьектамию тут будут коментарии к фото
-// схема массива - множество объектов со структурой - это пользователи, которые комментируют фотографии
-// {
-//   id: 135, число не должно повторяться
-//   avatar: 'img/avatar-6.svg',
-//   message: 'В целом всё неплохо. Но не всё.',
-//   name: 'Артём',
-// }
 
-// создаем объект со структурой:
-// id - число от 1 до 25;
-// url - адрес картинки с номероами;
-// description - описание фотографии;
-// likes - количество лайков;
-// comments - вложенный массив, его струкрура уже есть
 const createUsers = () => ({
-  url: '',
+  // id: createIdUser(), - придумать случайное число, чтобы оно не повторялось
   avatar: `img/avatar-${getRandomNumber(MIN_NUMBER_AVATAR, MAX_NUMBER_AVATAR)}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
 });
 
 const createPhotoPost = () => ({
-  id: createId(),
-  url: `photos/${createId(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENTS)}.jpg`,
-  description: '',
+  id: createIdPhoto(),
+  url: `photos/${createUrlPhoto()}.jpg`,
+  description:  DESCRIPTION[descriptionIndex++ % DESCRIPTION.length], // не понимаю, что здесь делается
   likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
   comments:  Array.from({length:getRandomNumber(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENTS)}, createUsers)
 });
