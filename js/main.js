@@ -81,7 +81,8 @@ const createId = () => {
 
 const createIdPhoto = createId();
 const createUrlPhoto = createId();
-let descriptionIndex = 0;
+const descriptionIndex = createId();
+const createIdUser = createId();
 
 const getRandomNumber = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
@@ -93,7 +94,7 @@ const getRandomNumber = (a, b) => {
 const getRandomArrayElement = (elements) => elements[getRandomNumber(MIN_NUMBER_COMMENTS, elements.length - 1)];
 
 const createUsers = () => ({
-  // id: createIdUser(), - придумать случайное число, чтобы оно не повторялось
+  id: createIdUser(),
   avatar: `img/avatar-${getRandomNumber(MIN_NUMBER_AVATAR, MAX_NUMBER_AVATAR)}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
@@ -102,7 +103,7 @@ const createUsers = () => ({
 const createPhotoPost = () => ({
   id: createIdPhoto(),
   url: `photos/${createUrlPhoto()}.jpg`,
-  description:  DESCRIPTION[descriptionIndex++ % DESCRIPTION.length], // не понимаю, что здесь делается
+  description:  DESCRIPTION[descriptionIndex() - 1], // не понимаю, что здесь делается
   likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
   comments:  Array.from({length:getRandomNumber(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENTS)}, createUsers)
 });
