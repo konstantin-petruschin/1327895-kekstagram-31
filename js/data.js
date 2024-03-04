@@ -68,10 +68,10 @@ const MESSAGES = [
 const SIMILAR_PHOTO_POST = 25;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
-const MIN_NUMBER_COMMENTS = 0;
-const MAX_NUMBER_COMMENTS = 30;
-const MIN_NUMBER_AVATAR = 1;
-const MAX_NUMBER_AVATAR = 6;
+const MIN_COUNT_COMMENTS = 0;
+const MAX_COUNT_COMMENTS = 30;
+const MIN_COUNT_AVATAR = 1;
+const MAX_COUNT_AVATAR = 6;
 
 const createIdPhoto = createId();
 const createUrlPhoto = createId();
@@ -80,7 +80,7 @@ const createIdUser = createId();
 
 const createUsers = () => ({
   id: createIdUser(),
-  avatar: `img/avatar-${getRandomNumber(MIN_NUMBER_AVATAR, MAX_NUMBER_AVATAR)}.svg`,
+  avatar: `img/avatar-${getRandomNumber(MIN_COUNT_AVATAR, MAX_COUNT_AVATAR)}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
 });
@@ -90,12 +90,9 @@ const createPhotoPost = () => ({
   url: `photos/${createUrlPhoto()}.jpg`,
   description:  DESCRIPTION[descriptionIndex() - 1],
   likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-  comments:  Array.from({length:getRandomNumber(MIN_NUMBER_COMMENTS, MAX_NUMBER_COMMENTS)}, createUsers)
+  comments:  Array.from({length:getRandomNumber(MIN_COUNT_COMMENTS, MAX_COUNT_COMMENTS)}, createUsers)
 });
 
-const similarPhoto = Array.from({length: SIMILAR_PHOTO_POST}, createPhotoPost);
+export {MIN_COUNT_COMMENTS, SIMILAR_PHOTO_POST, createPhotoPost};
 
-console.log(similarPhoto);
-
-export {MIN_NUMBER_COMMENTS};
 
