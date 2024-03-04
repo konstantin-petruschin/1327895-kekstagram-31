@@ -1,5 +1,3 @@
-import {MIN_NUMBER_COMMENTS} from './data';
-
 const getRandomNumber = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.ceil(Math.max(Math.abs(a), Math.abs(b)));
@@ -7,7 +5,7 @@ const getRandomNumber = (a, b) => {
   return Math.floor(result);
 };
 
-const getRandomArrayElement = (elements) => elements[getRandomNumber(MIN_NUMBER_COMMENTS, elements.length - 1)];
+const getRandomArrayElement = (elements) => elements[getRandomNumber(0, elements.length - 1)];
 
 
 const createId = () => {
