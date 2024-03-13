@@ -93,6 +93,6 @@ const createPhotoPost = () => ({
   comments:  Array.from({length:getRandomNumber(MIN_COUNT_COMMENTS, MAX_COUNT_COMMENTS)}, createUsers)
 });
 
-export {MIN_COUNT_COMMENTS, SIMILAR_PHOTO_POST, createPhotoPost};
+export {SIMILAR_PHOTO_POST, createPhotoPost};
 
 
