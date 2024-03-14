@@ -1,16 +1,18 @@
-import {createPhotoPost} from './data';
+import {similarPhoto} from './data.js';
 
-const template = document.querySelector('#picture').content.querySelector('.picture');
-const pictures = document.querySelector('.pictures');
+const picturesTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const picturesContainer = document.querySelector('.pictures');
+const listFragmentPhoto = document.createDocumentFragment();
 
-// создать шаблон для постов;
-// Адрес изображения url в src;
-// описание изображения в description в alt;
-// количество лайков likes выведите в блок .picture__likes;
-// количество коментариев comments в .picture__comments
+similarPhoto.forEach((photo) => {
+  const pictureElement = picturesTemplate.cloneNode(true);
+  pictureElement.querySelector('.picture__img').src = photo.url;
+  pictureElement.querySelector('.picture__img').alt = photo.description;
+  pictureElement.querySelector('.picture__likes').textContent = photo.likes;
+  pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
+  listFragmentPhoto.appendChild(pictureElement);
+});
 
+const createPosts = picturesContainer.appendChild(listFragmentPhoto);
 
-//отрисованные элементы перенести в блок .pictures для всавки элементов нужен DocumentFragment
-//помотреть как создаются шаблоны в js
-//как переносить элементы в блок. Что такое DocumentFragment ?
-// использовать функию для создания фотопостов createPhotoPost нужно или нет?
+export default {createPosts};
