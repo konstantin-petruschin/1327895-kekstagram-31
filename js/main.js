@@ -1,4 +1,7 @@
-import createPosts from './create-posts.js';
+import {similarPhoto} from './data.js';
+import {renderSimilarPhotoPostsArray} from './create-posts.js';
 
-createPosts();
+const similarPhotoPostsArray = similarPhoto();
+
+renderSimilarPhotoPostsArray(similarPhotoPostsArray);
 
