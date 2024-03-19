@@ -1,5 +1,7 @@
-import {SIMILAR_PHOTO_POST, createPhotoPost} from './data.js';
+import {similarPhoto} from './data.js';
+import {renderSimilarPhotoPostsArray} from './create-posts.js';
 
-const similarPhoto = () => Array.from({length: SIMILAR_PHOTO_POST}, createPhotoPost);
+const similarPhotoPostsArray = similarPhoto();
 
-console.log(similarPhoto());
+renderSimilarPhotoPostsArray(similarPhotoPostsArray);
+
