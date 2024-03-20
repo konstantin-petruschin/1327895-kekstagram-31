@@ -1,4 +1,31 @@
-import './create-posts.js';
+import { isEscapeKey } from './util';
+import { similarPhotoPostsArray } from './data';
+const userPictureElement = document.querySelector('.big-picture');
+const userPictureCloseElement = document.querySelector('.big-picture__cancel');
+userPictureElement.classList.remove('hidden');
 
-const userModalElement = document.querySelector('.big-picture');
-userModalElement.classList.remove('hidden');
+userPictureElement.addEventListener('click', (evt) => {
+  if (evt.target.closest('.big-picture')) {
+    userPictureElement.classList.remove('hidden');
+    similarPhotoPostsArray.forEach((photo, id) => {const pictureBigImg = userPictureElement.querySelector('.big-picture__img');
+      pictureBigImg.src = photo.url;
+      pictureBigImg.alt = photo.description;
+      userPictureElement.querySelector('.picture__likes').textContent = photo.likes;
+      userPictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
+      userPictureElement.dataset.id = id;
+      userPictureElement.appendChild(userPictureElement);
+    });
+  }
+});
+
+userPictureCloseElement.addEventListener('click', () =>{
+  userPictureElement.classList.add('hidden');
+});
+
+document.addEventListener('keydown' ,(evt)=> {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    userPictureElement.classList.add('hidden');
+  }
+});
+
