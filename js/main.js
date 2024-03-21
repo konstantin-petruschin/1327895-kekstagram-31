@@ -4,4 +4,3 @@ import './user-modal.js';
 const similarPhotoPostsArray = similarPhoto();
 
 renderSimilarPhotoPostsArray(similarPhotoPostsArray);
-

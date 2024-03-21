@@ -17,4 +17,4 @@ const renderSimilarPhotoPostsArray = (similarPhotoPostsArray) => {
   picturesContainer.appendChild(listFragmentPhoto);
 };
 
-export {renderSimilarPhotoPostsArray};
+export {renderSimilarPhotoPostsArray, picturesTemplate, picturesContainer};
