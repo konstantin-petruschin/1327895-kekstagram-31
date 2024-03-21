@@ -1,62 +1,35 @@
 import { isEscapeKey } from './util.js';
-import {picturesContainer} from './similar-posts.js';
-// import { similarPhotoPostsArray } from './main.js';
-const userPictureElement = document.querySelector('.big-picture');
+
+const bigPictureElement = document.querySelector('big-picture');
+const allPictureElement = document.querySelector('pictures');
 const userPictureCloseElement = document.querySelector('.big-picture__cancel');
 
-picturesContainer.addEventListener('click', (evt) => {
-  if (evt.target.closest('.big-picture')) {
-    userPictureElement.classList.remove('hidden');
-    similarPhotoPostsArray.forEach((photo, id) => {
-      const pictureBigImg = userPictureElement.querySelector('.big-picture__img');
-      pictureBigImg.src = photo.url;
-      pictureBigImg.alt = photo.description;
-      userPictureElement.querySelector('.picture__likes').textContent = photo.likes;
-      userPictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
-      userPictureElement.dataset.id = id;
-      userPictureElement.appendChild(userPictureElement);
-    });
-  }
-});
+const showBigPicture = (arr) => {
+  allPictureElement.addEventListener('click', (evt) => {
+    if (evt.target.closest('.big-picture')) {
+      bigPictureElement.classList.remove('hidden');
+      //   const pictureBigImg = bigPictureElement.querySelector('.big-picture__img img');
+      //   pictureBigImg.src = photo.url;
+      //   pictureBigImg.alt = photo.description;
+      //   bigPictureElement.querySelector('.picture__likes').textContent = photo.likes;
+      //   bigPictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
+    }
+  });
+};
 
+
+// evt.target.closest('.big-picture') - с этого элемента получить дата-атрибут
+// обратиться к массиву arr (и переименовать его) и в нем найти тот объект у которого такой же ай ди;
+// у нас нет объекта фото достать из массива evt.target.closest('.big-picture')
 userPictureCloseElement.addEventListener('click', () =>{
-  userPictureElement.classList.add('hidden');
+  bigPictureElement.classList.add('hidden');
 });
 
 document.addEventListener('keydown' ,(evt)=> {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    userPictureElement.classList.add('hidden');
+    bigPictureElement.classList.add('hidden');
   }
 });
 
-
-
-
-// userPictureElement.classList.remove('hidden');
-
-// userPictureElement.addEventListener('click', (evt) => {
-//   if (evt.target.closest('.big-picture')) {
-//     userPictureElement.classList.remove('hidden');
-//     similarPhotoPostsArray.forEach((photo, id) => {const pictureBigImg = userPictureElement.querySelector('.big-picture__img');
-//       pictureBigImg.src = photo.url;
-//       pictureBigImg.alt = photo.description;
-//       userPictureElement.querySelector('.picture__likes').textContent = photo.likes;
-//       userPictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
-//       userPictureElement.dataset.id = id;
-//       userPictureElement.appendChild(userPictureElement);
-//     });
-//   }
-// });
-
-// userPictureCloseElement.addEventListener('click', () =>{
-//   userPictureElement.classList.add('hidden');
-// });
-
-// document.addEventListener('keydown' ,(evt)=> {
-//   if (isEscapeKey(evt)) {
-//     evt.preventDefault();
-//     userPictureElement.classList.add('hidden');
-//   }
-// });
-
+export { showBigPicture };
