@@ -7,7 +7,7 @@ const userPictureCloseElement = document.querySelector('.big-picture__cancel');
 const showBigPicture = (photoPosts) => {
   allPictureElement.addEventListener('click', (evt) => {
     if (evt.target.closest('.picture')) {
-      const photo = photoPosts[parseInt(evt.target.closest('.picture').dataset.id, 10)];
+      const photo = photoPosts.find((item) => item.id === parseInt(evt.target.closest('.picture').dataset.id, 10));
 
       bigPictureElement.classList.remove('hidden');
       bigPictureElement.querySelector('.big-picture__img img').src = photo.url;
@@ -19,7 +19,7 @@ const showBigPicture = (photoPosts) => {
       bigPictureElement.querySelector('.social__caption').textContent = photo.description;
       socialCommentsList.innerHTML = '';
 
-      const socialCommentTemplate = bigPictureElement.querySelector('.social__comment').cloneNode(true);
+      const socialCommentTemplate = bigPictureElement.querySelector('.social__comments').cloneNode(true);
       const socialCommentsFragment = document.createDocumentFragment();
 
       photo.comments.forEach((comment) => {
