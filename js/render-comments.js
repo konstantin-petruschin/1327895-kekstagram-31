@@ -3,12 +3,9 @@ let currentCount = 0;
 let comments = [];
 const bigPictureElement = document.querySelector('.big-picture');
 const socialCommentsList = bigPictureElement.querySelector('.social__comments');
+const socialCommentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
 const commentLoadButton = bigPictureElement.querySelector('.comments-loader');
 const countShownComments = bigPictureElement.querySelector('.social__comment-shown-count');
-
-
-const socialCommentTemplate = socialCommentsList.cloneNode(true);
-
 
 const renderNextComments = () => {
   const socialCommentsFragment = document.createDocumentFragment();
@@ -37,7 +34,7 @@ const renderComments = (currentComments) => {
   comments = currentComments;
 
   renderNextComments();
-  commentLoadButton.addEventListener('click', renderComments);
+  commentLoadButton.addEventListener('click', renderNextComments);
 };
 
 const clearComments = () => {

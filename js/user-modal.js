@@ -16,7 +16,6 @@ const showBigPicture = (photoPosts) => {
       bigPictureElement.classList.remove('hidden');
       bigPictureElement.querySelector('.big-picture__img img').src = photo.url;
       bigPictureElement.querySelector('.likes-count').textContent = photo.likes;
-      bigPictureElement.querySelector('.social__comment-shown-count').textContent = photo.comments.length;
       bigPictureElement.querySelector('.social__comment-total-count').textContent = photo.comments.length;
       bigPictureElement.querySelector('.social__caption').textContent = photo.description;
 
