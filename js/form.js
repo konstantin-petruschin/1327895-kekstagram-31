@@ -9,6 +9,22 @@ const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 
+const clearErrorMsg = () => {
+  const existingError = hashtagInput.parentNode.querySelector('.error-message');
+  if (existingError) {
+    existingError.remove();
+  }
+};
+
+const showErrorMsg = (errorMsg) => {
+  clearErrorMsg();
+
+  const errorElement = document.createElement('div');
+  errorElement.classList.add('error-message');
+  errorElement.textContent = errorMsg;
+  hashtagInput.parentNode.insertBefore(errorElement, hashtagInput.nextSibling);
+};
+
 const openUserModal = () => {
   imageUploadInput.addEventListener('change', () => {
     imageUploadOverlay.classList.remove('hidden');
@@ -30,16 +46,39 @@ document.addEventListener('keydown', (evt) => {
   }
 });
 
-
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorClass: 'img-upload__field-wrapper--error',
-  errorTextParrent: 'img-upload__field-wrapper',
-
+  errorTextParent: 'img-upload__field-wrapper',
 });
+
+const hashtagRegex = /^#[a-zA-Z0-9]{1,19}( #[a-zA-Z0-9]{1,19})*$/;
+
 pristine.addValidator(hashtagInput, (value) => {
-  const hasNumber = /^#[a-zа-яё0-9]{1,19}$/i.test(value);
-  return hasNumber;
+  if (!hashtagRegex.test(value)) {
+    showErrorMsg('Хештегы должны начинаться с символа #, состоять из букв и цифр, и иметь длину от 1 до 19 символов.');
+    return false;
+  }
+
+  if (!/\s/.test(value)) {
+    showErrorMsg('Разделите xештеги через пробел');
+    return false;
+  }
+
+  const hashtags = value.trim().split(' ');
+  if (hashtags.length > 5) {
+    showErrorMsg('Укажите не больше пяти хештегов');
+    return false;
+  }
+
+  const uniqueHashtags = new Set(hashtags);
+  if (hashtags.length !== uniqueHashtags.size) {
+    showErrorMsg('Один и тот же хештег не может быть использован дважды');
+    return false;
+  }
+
+  clearErrorMsg();
+  return true;
 });
 
 openUserModal();
