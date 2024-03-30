@@ -25,6 +25,7 @@ const showErrorMsg = (errorMsg) => {
   errorElement.classList.add('error-message');
   errorElement.textContent = errorMsg;
   hashtagInput.parentNode.insertBefore(errorElement, hashtagInput.nextSibling);
+  commentInput.parentNode.insertBefore(errorElement, commentInput.nextSibling);
 };
 
 const openUserModal = () => {
