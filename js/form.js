@@ -9,6 +9,8 @@ const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel');
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 
+const isFieldFocused = () => document.activeElement === hashtagInput || document.activeElement === commentInput;
+
 const clearErrorMsg = () => {
   const existingError = hashtagInput.parentNode.querySelector('.error-message');
   if (existingError) {
@@ -39,7 +41,7 @@ const openUserModal = () => {
 };
 
 document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
+  if (isEscapeKey(evt) && !isFieldFocused) {
     evt.preventDefault();
     imageUploadOverlay.classList.add('hidden');
     pageBody.classList.remove('modal-open');
@@ -54,31 +56,46 @@ const pristine = new Pristine(uploadForm, {
 
 const hashtagRegex = /^#[a-zA-Z0-9]{1,19}( #[a-zA-Z0-9]{1,19})*$/;
 
-pristine.addValidator(hashtagInput, (value) => {
-  if (!hashtagRegex.test(value)) {
-    showErrorMsg('Хештегы должны начинаться с символа #, состоять из букв и цифр, и иметь длину от 1 до 19 символов.');
-    return false;
-  }
+const isValidHashtag = () => {
+  pristine.addValidator(hashtagInput, (value) => {
+    if (!hashtagRegex.test(value)) {
+      showErrorMsg('Хештегы должны начинаться с символа #, состоять из букв и цифр, и иметь длину от 1 до 19 символов');
+      return false;
+    }
 
-  if (!/\s/.test(value)) {
-    showErrorMsg('Разделите xештеги через пробел');
-    return false;
-  }
+    if (!/\s/.test(value)) {
+      showErrorMsg('Разделите xештеги через пробел');
+      return false;
+    }
 
-  const hashtags = value.trim().split(' ');
-  if (hashtags.length > 5) {
-    showErrorMsg('Укажите не больше пяти хештегов');
-    return false;
-  }
+    const hashtags = value.toLowerCase().trim().split(' ');
+    if (hashtags.length > 5) {
+      showErrorMsg('Укажите не больше пяти хештегов');
+      return false;
+    }
 
-  const uniqueHashtags = new Set(hashtags);
-  if (hashtags.length !== uniqueHashtags.size) {
-    showErrorMsg('Один и тот же хештег не может быть использован дважды');
-    return false;
-  }
+    const uniqueHashtags = new Set(hashtags);
+    if (hashtags.length !== uniqueHashtags.size) {
+      showErrorMsg('Один и тот же хештег не может быть использован дважды');
+      return false;
+    }
 
-  clearErrorMsg();
-  return true;
-});
+    clearErrorMsg();
+    return true;
+  });
+};
+
+const isValidComment = () => {
+  pristine.addValidator(commentInput, (value) => {
+    const commentLength = value.length <= 140;
+    if (!commentLength) {
+      showErrorMsg('Длина комментария не должна превышать 140 символов');
+      return false;
+    }
+    return true;
+  });
+};
 
 openUserModal();
+isValidHashtag();
+isValidComment();
