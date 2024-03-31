@@ -18,16 +18,6 @@ const clearErrorMsg = () => {
   }
 };
 
-const showErrorMsg = (errorMsg) => {
-  clearErrorMsg();
-
-  const errorElement = document.createElement('div');
-  errorElement.classList.add('error-message');
-  errorElement.textContent = errorMsg;
-  hashtagInput.parentNode.insertBefore(errorElement, hashtagInput.nextSibling);
-  commentInput.parentNode.insertBefore(errorElement, commentInput.nextSibling);
-};
-
 const openUserModal = () => {
   imageUploadInput.addEventListener('change', () => {
     imageUploadOverlay.classList.remove('hidden');
@@ -42,61 +32,49 @@ const openUserModal = () => {
 };
 
 document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt) && !isFieldFocused) {
+  if (isEscapeKey(evt) && !isFieldFocused()) {
     evt.preventDefault();
     imageUploadOverlay.classList.add('hidden');
     pageBody.classList.remove('modal-open');
   }
 });
 
-const pristine = new Pristine(uploadForm, {
-  classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--error',
-  errorTextParent: 'img-upload__field-wrapper',
-});
-
-const hashtagRegex = /^#[a-zA-Z0-9]{1,19}( #[a-zA-Z0-9]{1,19})*$/;
-
-const isValidHashtag = () => {
-  pristine.addValidator(hashtagInput, (value) => {
-    if (!hashtagRegex.test(value)) {
-      showErrorMsg('Хештегы должны начинаться с символа #, состоять из букв и цифр, и иметь длину от 1 до 19 символов');
-      return false;
-    }
-
-    if (!/\s/.test(value)) {
-      showErrorMsg('Разделите xештеги через пробел');
-      return false;
-    }
-
-    const hashtags = value.toLowerCase().trim().split(' ');
-    if (hashtags.length > 5) {
-      showErrorMsg('Укажите не больше пяти хештегов');
-      return false;
-    }
-
-    const uniqueHashtags = new Set(hashtags);
-    if (hashtags.length !== uniqueHashtags.size) {
-      showErrorMsg('Один и тот же хештег не может быть использован дважды');
-      return false;
-    }
-
-    clearErrorMsg();
-    return true;
+  const pristine = new Pristine(uploadForm, {
+    classTo: 'img-upload__field-wrapper',
+    errorTextClass: 'img-upload__field-wrapper--error',
+    errorTextParent: 'img-upload__field-wrapper',
   });
+
+  const checkLengthComment = () => commentInput.value.length <= 140;
+  const errorMessage = `Длина комментария ${commentInput.value.length} больше 140 символов`;
+  pristine.addValidator(commentInput, checkLengthComment, errorMessage);
+
+  const hashtagRegex = /^#[a-zA-Z0-9]{1,19}( #[a-zA-Z0-9]{1,19})*$/;
+  const checkValidHashtags = () => hashtagRegex.test(hashtagInput.value);
+  const checkPresenceGaps = () => hashtagInput.value.replace(/\s{2,}/g, ' ');
+  const hashtagsArray = hashtagInput.value.trim().toLowerCase().split(' ');
+  const checkQuantityHashtags = () => hashtagsArray.length < 5;
+  const checkHashtagDuplicate = () => new Set(hashtagsArray).size === hashtagsArray.length;
+
+  if (hashtagInput.value) {
+    pristine.addValidator(hashtagInput, checkValidHashtags, 'Хештеги должны начинаться с символа #, состоять из букв и цифр, и иметь длину от 1 до 19 символов');
+    pristine.addValidator(hashtagInput, checkPresenceGaps, 'Разделите хештеги через пробел');
+    pristine.addValidator(hashtagInput, checkQuantityHashtags, 'Укажите не больше пяти хештегов');
+    pristine.addValidator(hashtagInput, checkHashtagDuplicate, 'Один и тот же хештег не может быть использован дважды');
+  }
+
+  const isValid = pristine.validate();
+
+  // Define a function to handle the form submission event
+const handleFormSubmission = (event) => {
+  if (!isValid) {
+    event.preventDefault();
+  }
 };
 
-const isValidComment = () => {
-  pristine.addValidator(commentInput, (value) => {
-    const commentLength = value.length <= 140;
-    if (!commentLength) {
-      showErrorMsg('Длина комментария не должна превышать 140 символов');
-      return false;
-    }
-    return true;
-  });
-};
+// Add event listener for form submission (assuming it's a 'submit' event)
+uploadForm.addEventListener('submit', handleFormSubmission);
+
+
 
 openUserModal();
-isValidHashtag();
-isValidComment();
