@@ -2,6 +2,7 @@ import { isEscapeKey } from './util.js';
 
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
+const SCALE_STEP = 0.25;
 
 const uploadForm = document.querySelector('.img-upload__form');
 const pageBody = document.querySelector('body');
@@ -11,8 +12,17 @@ const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel'); //pho
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+const reduce = uploadForm.querySelector('.scale__control--smaller');
+const increase = uploadForm.querySelector('.scale-control--bigger');
+const imgUploadPreview = uploadForm.querySelector('.img-upload--preview img');
+const scaleControl = uploadForm.querySelector('.scale__control--value');
+const effectLevel= uploadForm.querySelector('.img-upload__effect-level');
+const effectList = uploadForm.querySelector('.effect__list');
+const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
+const slider = imgUploadWrapper.querySelector('.effect-level__slider');
 
 let errorMessage = '';
+let scale = 1;
 
 const openUserModal = () => {
   imageUploadInput.addEventListener('change', () => {
@@ -112,30 +122,24 @@ const onFormSubmit = (evt) => {
   }
 };
 
-
-// const hashtagsArray = (value) => value.trim().toLowerCase().split(' ');
-
-// const checkValidHashtags = (value) => hashtagRegex.test(value);
-// const checkQuantityHashtags = (value) => hashtagsArray(value).length < 5;
-// const checkHashtagDuplicate = () => new Set(hashtagsArray).size === hashtagsArray.length;
-// checkValidHashtags();
-// if (hashtagInput.value) {
-//   pristine.addValidator(hashtagInput, checkValidHashtags, );
-//   pristine.addValidator(hashtagInput, checkQuantityHashtags, 'Укажите не больше пяти хештегов');
-//   pristine.addValidator(hashtagInput, checkHashtagDuplicate, );
-// }
-
-
-// document.addEventListener('keydown', (evt) => {
-//   if (isEscapeKey(evt) && !isFieldFocused()) {
-//     evt.preventDefault();
-//     imageUploadOverlay.classList.add('hidden');
-//     pageBody.classList.remove('modal-open');
-//   }
-// });
-
 const checkLengthComment = () => commentInput.value.length <= MAX_LENGTH_COMMENT;
 errorMessage = `Длина комментари больше ${MAX_LENGTH_COMMENT} символов`;
+
+const onReduceClick = () => {
+  if(scale > SCALE_STEP) {
+    scale -= SCALE_STEP;
+    imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
+    scaleControl.value = `${scale * 100}%`;
+  }
+};
+
+const onIncreaseClick = () => {
+  if(scale < 1) {
+    scale += SCALE_STEP;
+    imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
+    scaleControl.value = `${scale * 100}%`;
+  }
+};
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -148,3 +152,5 @@ openUserModal();
 
 hashtagInput.addEventListener('input', onHashtagInput);
 uploadForm.addEventListener('submit', onFormSubmit);
+reduce.addEventListener('change', onReduceClick);
+increase.addEventListener('change', onIncreaseClick);
