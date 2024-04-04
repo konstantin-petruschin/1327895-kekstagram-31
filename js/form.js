@@ -2,6 +2,7 @@ import { isEscapeKey } from './util.js';
 
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
+const SCALE_STEP = 0.25;
 
 const uploadForm = document.querySelector('.img-upload__form');
 const pageBody = document.querySelector('body');
@@ -11,8 +12,19 @@ const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel'); //pho
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+const reduce = uploadForm.querySelector('.scale__control--smaller');
+const increase = uploadForm.querySelector('.scale-control--bigger');
+const imgUploadPreview = uploadForm.querySelector('.img-upload--preview img');
+const scaleControl = uploadForm.querySelector('.scale__control--value');
+const effectLevel= uploadForm.querySelector('.img-upload__effect-level');
+const effectList = uploadForm.querySelector('.effect__list');
+
+const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
+const slider = imgUploadWrapper.querySelector('.effect-level__slider');
+// const
 
 let errorMessage = '';
+let scale = 1;
 
 const openUserModal = () => {
   imageUploadInput.addEventListener('change', () => {
@@ -142,9 +154,30 @@ uploadForm.addEventListener('submit', (evt) => {
   pristine.validate();
 });
 
+
+const onReduceClick = () => {
+  if(scale > SCALE_STEP) {
+    scale -= SCALE_STEP;
+    imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
+    scaleControl.value = `${scale * 100}%`;
+  }
+};
+
+const onIncreaseClick = () => {
+  if(scale < 1) {
+    scale += SCALE_STEP;
+    imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
+    scaleControl.value = `${scale * 100}%`;
+  }
+};
+
 pristine.addValidator(hashtagInput, isValidHashtags, error, 2, false);
 pristine.addValidator(commentInput, checkLengthComment, errorMessage);
-openUserModal();
+
 
 hashtagInput.addEventListener('input', onHashtagInput);
 uploadForm.addEventListener('submit', onFormSubmit);
+reduce.addEventListener('change', onReduceClick);
+increase.addEventListener('change', onIncreaseClick);
+
+openUserModal();
