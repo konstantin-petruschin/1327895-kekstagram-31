@@ -12,31 +12,32 @@ const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel'); //pho
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
+
 const reduce = uploadForm.querySelector('.scale__control--smaller');
 const increase = uploadForm.querySelector('.scale-control--bigger');
-const imgUploadPreview = uploadForm.querySelector('.img-upload--preview img');
-const scaleControl = uploadForm.querySelector('.scale__control--value');
-const effectLevel= uploadForm.querySelector('.img-upload__effect-level');
+
+const imgUploadPreview = uploadForm.querySelector('.img-upload--preview img'); // preview
+const scaleControlValue = uploadForm.querySelector('.scale__control--value');
+const effectLevel = uploadForm.querySelector('.img-upload__effect-level'); // sliderContainer
 const effectList = uploadForm.querySelector('.effect__list');
 const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
-const slider = imgUploadWrapper.querySelector('.effect-level__slider');
+const slider = imgUploadWrapper.querySelector('.effect-level__slider'); // effectLevelSlider
 
 let errorMessage = '';
 let scale = 1;
 
 const openUserModal = () => {
-  imageUploadInput.addEventListener('change', () => {
-    imageUploadOverlay.classList.remove('hidden');
-    pageBody.classList.add('modal-open');
-    imageUploadInput.value = '';
+  imageUploadOverlay.classList.remove('hidden');
+  pageBody.classList.add('modal-open');
+  imageUploadInput.value = '';
 
-    imageUploadCancel.addEventListener('click', () => {
-      imageUploadOverlay.classList.add('hidden');
-      pageBody.classList.remove('modal-open');
-    });
+  imageUploadCancel.addEventListener('click', () => {
+    imageUploadOverlay.classList.add('hidden');
+    pageBody.classList.remove('modal-open');
   });
 };
 
+imageUploadInput.addEventListener ('change', openUserModal);
 
 const onPhotoEditorResetButtonClick = () => closePhotoEditor() ;
 const onDocunentKeydown = (evt) => {
@@ -112,8 +113,6 @@ const isValidHashtags = (value) => {
   });
 };
 
-const onHashtagInput = () => isValidHashtags(hashtagInput.value);
-
 const onFormSubmit = (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
@@ -129,7 +128,7 @@ const onReduceClick = () => {
   if(scale > SCALE_STEP) {
     scale -= SCALE_STEP;
     imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
-    scaleControl.value = `${scale * 100}%`;
+    scaleControlValue.value = `${scale * 100}%`;
   }
 };
 
@@ -137,20 +136,13 @@ const onIncreaseClick = () => {
   if(scale < 1) {
     scale += SCALE_STEP;
     imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
-    scaleControl.value = `${scale * 100}%`;
+    scaleControlValue.value = `${scale * 100}%`;
   }
 };
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
-
 pristine.addValidator(hashtagInput, isValidHashtags, error, 2, false);
 pristine.addValidator(commentInput, checkLengthComment, errorMessage);
-openUserModal();
 
-hashtagInput.addEventListener('input', onHashtagInput);
 uploadForm.addEventListener('submit', onFormSubmit);
 reduce.addEventListener('change', onReduceClick);
 increase.addEventListener('change', onIncreaseClick);
