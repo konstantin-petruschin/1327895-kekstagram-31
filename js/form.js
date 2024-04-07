@@ -2,34 +2,23 @@ import { isEscapeKey } from './util.js';
 
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
-const SCALE_STEP = 0.25;
+
 
 const uploadForm = document.querySelector('.img-upload__form');
 const pageBody = document.querySelector('body');
-const imageUploadInput = uploadForm.querySelector('.img-upload__input'); // uploadFileControl
+const imageUploadInput = uploadForm.querySelector('.img-upload__input'); // #upload-file .uploadFileControl
 const imageUploadOverlay = uploadForm.querySelector('.img-upload__overlay'); //PhotoEditorForm
 const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel'); //photoEditorResetBtn
+// const effectsPreviews = uploadForm.querySelectorAll('effects__preview');
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 
-const reduce = uploadForm.querySelector('.scale__control--smaller');
-const increase = uploadForm.querySelector('.scale-control--bigger');
-
-const imgUploadPreview = uploadForm.querySelector('.img-upload--preview img'); // preview
-const scaleControlValue = uploadForm.querySelector('.scale__control--value');
-const effectLevel = uploadForm.querySelector('.img-upload__effect-level'); // sliderContainer
-const effectList = uploadForm.querySelector('.effect__list');
-const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
-const slider = imgUploadWrapper.querySelector('.effect-level__slider'); // effectLevelSlider
-
 let errorMessage = '';
-let scale = 1;
 
 const openUserModal = () => {
   imageUploadOverlay.classList.remove('hidden');
   pageBody.classList.add('modal-open');
-  imageUploadInput.value = '';
 
   imageUploadCancel.addEventListener('click', () => {
     imageUploadOverlay.classList.add('hidden');
@@ -81,7 +70,7 @@ const isValidHashtags = (value) => {
 
   const inputText = value.toLowerCase().trim();
 
-  if(!inputText.length === 0) {
+  if(inputText.length === 0) {
     return true;
   }
 
@@ -105,44 +94,30 @@ const isValidHashtags = (value) => {
   ];
 
   return conditionsArray.every((itemCondition) => {
-    const isValid = itemCondition.check;
-    if (isValid) {
+    const notValid = itemCondition.check;
+    if (notValid) {
       errorMessage = itemCondition.error;
     }
-    return !isValid;
+    return !notValid;
   });
 };
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
+    pristine.reset();
     hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
     uploadForm.submit();
   }
 };
 
-const checkLengthComment = () => commentInput.value.length <= MAX_LENGTH_COMMENT;
+const checkLengthComment = (value) => value.length <= MAX_LENGTH_COMMENT;
 errorMessage = `Длина комментари больше ${MAX_LENGTH_COMMENT} символов`;
 
-const onReduceClick = () => {
-  if(scale > SCALE_STEP) {
-    scale -= SCALE_STEP;
-    imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
-    scaleControlValue.value = `${scale * 100}%`;
-  }
-};
-
-const onIncreaseClick = () => {
-  if(scale < 1) {
-    scale += SCALE_STEP;
-    imgUploadPreview.computedStyleMap.tarnsform = `scale(${scale})`;
-    scaleControlValue.value = `${scale * 100}%`;
-  }
-};
+//---------------------------------------------------------------------------------
 
 pristine.addValidator(hashtagInput, isValidHashtags, error, 2, false);
 pristine.addValidator(commentInput, checkLengthComment, errorMessage);
 
 uploadForm.addEventListener('submit', onFormSubmit);
-reduce.addEventListener('change', onReduceClick);
-increase.addEventListener('change', onIncreaseClick);
+
