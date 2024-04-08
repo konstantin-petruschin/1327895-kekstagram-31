@@ -16,5 +16,17 @@ const createId = () => {
   };
 };
 
+const getEffectSelector = (currentInputId) => {
+  const selectors = {
+    'effect-none': 'effect__preview--none',
+    'effect-chrome': 'effect__preview--chrome',
+    'effect-sepia': 'effect__preview--sepia',
+    'effect-marvin': 'effect__preview--marvin',
+    'effect-phobos': 'effect__preview--phobos',
+    'effect-heat': 'effect__preview--heat',
+  };
+  return selectors[currentInputId];
+};
+
 const isEscapeKey = (evt) => evt.key === 'Escape';
-export {getRandomArrayElement, getRandomNumber, createId, isEscapeKey};
+export {getRandomArrayElement, getRandomNumber, createId, getEffectSelector, isEscapeKey};

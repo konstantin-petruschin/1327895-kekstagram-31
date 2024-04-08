@@ -3,11 +3,13 @@ import { isEscapeKey } from './util.js';
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
 
+
 const uploadForm = document.querySelector('.img-upload__form');
 const pageBody = document.querySelector('body');
-const imageUploadInput = uploadForm.querySelector('.img-upload__input'); // uploadFileControl
+const imageUploadInput = uploadForm.querySelector('.img-upload__input'); // #upload-file .uploadFileControl
 const imageUploadOverlay = uploadForm.querySelector('.img-upload__overlay'); //PhotoEditorForm
 const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel'); //photoEditorResetBtn
+// const effectsPreviews = uploadForm.querySelectorAll('effects__preview');
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
@@ -15,18 +17,16 @@ const commentInput = uploadForm.querySelector('.text__description');
 let errorMessage = '';
 
 const openUserModal = () => {
-  imageUploadInput.addEventListener('change', () => {
-    imageUploadOverlay.classList.remove('hidden');
-    pageBody.classList.add('modal-open');
-    imageUploadInput.value = '';
+  imageUploadOverlay.classList.remove('hidden');
+  pageBody.classList.add('modal-open');
 
-    imageUploadCancel.addEventListener('click', () => {
-      imageUploadOverlay.classList.add('hidden');
-      pageBody.classList.remove('modal-open');
-    });
+  imageUploadCancel.addEventListener('click', () => {
+    imageUploadOverlay.classList.add('hidden');
+    pageBody.classList.remove('modal-open');
   });
 };
 
+imageUploadInput.addEventListener ('change', openUserModal);
 
 const onPhotoEditorResetButtonClick = () => closePhotoEditor() ;
 const onDocunentKeydown = (evt) => {
@@ -70,7 +70,7 @@ const isValidHashtags = (value) => {
 
   const inputText = value.toLowerCase().trim();
 
-  if(!inputText.length === 0) {
+  if(inputText.length === 0) {
     return true;
   }
 
@@ -94,57 +94,30 @@ const isValidHashtags = (value) => {
   ];
 
   return conditionsArray.every((itemCondition) => {
-    const isValid = itemCondition.check;
-    if (isValid) {
+    const notValid = itemCondition.check;
+    if (notValid) {
       errorMessage = itemCondition.error;
     }
-    return !isValid;
+    return !notValid;
   });
 };
-
-const onHashtagInput = () => isValidHashtags(hashtagInput.value);
 
 const onFormSubmit = (evt) => {
   evt.preventDefault();
   if (pristine.validate()) {
+    pristine.reset();
     hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
     uploadForm.submit();
   }
 };
 
-
-// const hashtagsArray = (value) => value.trim().toLowerCase().split(' ');
-
-// const checkValidHashtags = (value) => hashtagRegex.test(value);
-// const checkQuantityHashtags = (value) => hashtagsArray(value).length < 5;
-// const checkHashtagDuplicate = () => new Set(hashtagsArray).size === hashtagsArray.length;
-// checkValidHashtags();
-// if (hashtagInput.value) {
-//   pristine.addValidator(hashtagInput, checkValidHashtags, );
-//   pristine.addValidator(hashtagInput, checkQuantityHashtags, 'Укажите не больше пяти хештегов');
-//   pristine.addValidator(hashtagInput, checkHashtagDuplicate, );
-// }
-
-
-// document.addEventListener('keydown', (evt) => {
-//   if (isEscapeKey(evt) && !isFieldFocused()) {
-//     evt.preventDefault();
-//     imageUploadOverlay.classList.add('hidden');
-//     pageBody.classList.remove('modal-open');
-//   }
-// });
-
-const checkLengthComment = () => commentInput.value.length <= MAX_LENGTH_COMMENT;
+const checkLengthComment = (value) => value.length <= MAX_LENGTH_COMMENT;
 errorMessage = `Длина комментари больше ${MAX_LENGTH_COMMENT} символов`;
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+//---------------------------------------------------------------------------------
 
 pristine.addValidator(hashtagInput, isValidHashtags, error, 2, false);
 pristine.addValidator(commentInput, checkLengthComment, errorMessage);
-openUserModal();
 
-hashtagInput.addEventListener('input', onHashtagInput);
 uploadForm.addEventListener('submit', onFormSubmit);
+
