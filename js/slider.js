@@ -7,13 +7,13 @@ const uploadForm = document.querySelector('.img-upload__form');
 const reduce = uploadForm.querySelector('.scale__control--smaller');
 const increase = uploadForm.querySelector('.scale__control--bigger');
 
-const imgUploadPreview = uploadForm.querySelector('.img-upload__preview img'); // preview
+const imgUploadPreview = uploadForm.querySelector('.img-upload__preview img');
 const scaleControlValue = uploadForm.querySelector('.scale__control--value');
-const effectLevel = uploadForm.querySelector('.img-upload__effect-level'); // sliderContainer
+const effectLevel = uploadForm.querySelector('.img-upload__effect-level');
 const effectLevelValue = uploadForm.querySelector('.effect-level__value');
 effectLevelValue.value = EFFECT_MAX_LEVEL;
 const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
-const effectLevelSlider = imgUploadWrapper.querySelector('.effect-level__slider'); // effectSlider
+const effectLevelSlider = imgUploadWrapper.querySelector('.effect-level__slider');
 const effectRadio = uploadForm.querySelectorAll('.effects__radio');
 
 let scale = 1;
