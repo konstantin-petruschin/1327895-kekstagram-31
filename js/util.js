@@ -38,4 +38,4 @@ export const showErrorMessage = (message) => {
 };
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
-export {getRandomArrayElement, getRandomNumber, createId, isEscapeKey};
+export {getRandomArrayElement, getRandomNumber, createId, isEscapeKey, showErrorMessage};
