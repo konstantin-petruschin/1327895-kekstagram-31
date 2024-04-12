@@ -1,15 +1,20 @@
-import { isEscapeKey } from './util.js';
+import { isEscapeKey, sendMessage, sendErrorMessage } from './util.js';
+import { sendData } from './api.js';
 
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
 
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
 
 const uploadForm = document.querySelector('.img-upload__form');
 const pageBody = document.querySelector('body');
 const imageUploadInput = uploadForm.querySelector('.img-upload__input'); // #upload-file .uploadFileControl
 const imageUploadOverlay = uploadForm.querySelector('.img-upload__overlay'); //PhotoEditorForm
 const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel'); //photoEditorResetBtn
-// const effectsPreviews = uploadForm.querySelectorAll('effects__preview');
+const submitButton = document.querySelector('.img-upload__submit');
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
@@ -119,3 +124,33 @@ pristine.addValidator(commentInput, checkLengthComment, errorMessage);
 
 uploadForm.addEventListener('submit', onFormSubmit);
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+// Функция отправки формы
+const setFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .catch(sendErrorMessage)
+        .finally(() => {
+          sendMessage();
+          unblockSubmitButton();
+        });
+    }
+  });
+};
+
+export { setFormSubmit };

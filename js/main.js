@@ -1,18 +1,15 @@
-import {similarPhoto} from './data.js';
 import {renderSimilarPhotoPostsArray} from './similar-posts.js';
 import {showBigPicture} from './user-modal.js';
-const similarPhotoPostsArray = similarPhoto();
 import './form.js';
 import './slider.js';
-import { showErrorMessage } from './util.js';
+import { getErrorMessage } from './util.js';
+import { getData } from './api.js';
 
 try {
   const photos = await getData();
-  savePhotos(photos);
+  renderSimilarPhotoPostsArray(photos);
+  showBigPicture(photos);
 } catch (error) {
-  showErrorMessage(error.message);
+  getErrorMessage(error.message);
 }
 
-
-renderSimilarPhotoPostsArray(similarPhotoPostsArray);
-showBigPicture(similarPhotoPostsArray);
