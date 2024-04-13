@@ -19,12 +19,12 @@ const load = (route, method = Method.GET, errorText, body = null) =>
   fetch(`${BASE_URL}${route}`, {method, body})
     .then((response) => {
       if(!response.ok) {
-        throw new Error();
+        throw new Error(`Произошла ошибка ${response.status}: ${response.statusText}`);
       }
       return response.json();
     })
-    .catch(() => {
-      throw new Error(errorText);
+    .catch((error) => {
+      throw new Error(errorText ?? error.message);
     });
 
 const getData = () => load(Route.GET_DATA, Method.GET, ErrorText.GET_DATA);

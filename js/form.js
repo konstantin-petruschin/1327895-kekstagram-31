@@ -1,5 +1,6 @@
 import { isEscapeKey, sendMessage, sendErrorMessage } from './util.js';
 import { sendData } from './api.js';
+import { resetFilter } from './slider.js';
 
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
@@ -11,9 +12,9 @@ const SubmitButtonText = {
 
 const uploadForm = document.querySelector('.img-upload__form');
 const pageBody = document.querySelector('body');
-const imageUploadInput = uploadForm.querySelector('.img-upload__input'); // #upload-file .uploadFileControl
-const imageUploadOverlay = uploadForm.querySelector('.img-upload__overlay'); //PhotoEditorForm
-const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel'); //photoEditorResetBtn
+const imageUploadInput = uploadForm.querySelector('.img-upload__input');
+const imageUploadOverlay = uploadForm.querySelector('.img-upload__overlay');
+const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel');
 const submitButton = document.querySelector('.img-upload__submit');
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
@@ -54,12 +55,13 @@ function closePhotoEditor () {
   imageUploadInput.value = '';
 }
 
-export const initUploadModal = () => {
+const initUploadModal = () => {
   imageUploadInput.addEventListener('change', () =>{
     imageUploadOverlay.classList.remove('hidden');
     pageBody.classList.add('modal-open');
-    imageUploadCancel.addEventListener('cklick', onPhotoEditorResetButtonClick);
+    imageUploadCancel.addEventListener('click', onPhotoEditorResetButtonClick);
     document.addEventListener('keydown' , onDocunentKeydown);
+    resetFilter();
   });
 };
 
@@ -107,22 +109,20 @@ const isValidHashtags = (value) => {
   });
 };
 
-const onFormSubmit = (evt) => {
-  evt.preventDefault();
-  if (pristine.validate()) {
-    pristine.reset();
-    hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-    uploadForm.submit();
-  }
-};
+// const onFormSubmit = (evt) => {
+//   evt.preventDefault();
+//   if (pristine.validate()) {
+//     pristine.reset();
+//     hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
+//     uploadForm.submit();
+//   }
+// };
 
 const checkLengthComment = (value) => value.length <= MAX_LENGTH_COMMENT;
 errorMessage = `Длина комментари больше ${MAX_LENGTH_COMMENT} символов`;
 
 pristine.addValidator(hashtagInput, isValidHashtags, error, 2, false);
 pristine.addValidator(commentInput, checkLengthComment, errorMessage);
-
-uploadForm.addEventListener('submit', onFormSubmit);
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -134,23 +134,25 @@ const unblockSubmitButton = () => {
   submitButton.textContent = SubmitButtonText.IDLE;
 };
 
-// Функция отправки формы
-const setFormSubmit = (onSuccess) => {
+
+const setFormSubmit = () => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
     if (isValid) {
       blockSubmitButton();
+      pristine.reset();
       sendData(new FormData(evt.target))
-        .then(onSuccess)
+        .then(sendMessage)
         .catch(sendErrorMessage)
         .finally(() => {
-          sendMessage();
           unblockSubmitButton();
+          resetFilter();
+          closePhotoEditor();
         });
     }
   });
 };
 
-export { setFormSubmit };
+export { initUploadModal, setFormSubmit };

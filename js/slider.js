@@ -136,5 +136,7 @@ const onIncreaseClick = () => {
 };
 
 reduce.addEventListener('click', onReduceClick);
-increase.addEventListener('click', onIncreaseClick); // лучше change или оставить как есть?
+increase.addEventListener('click', onIncreaseClick);
 effectRadio.forEach((radio) => radio.addEventListener('change', onEffectRadioButtonClick));
+
+export { resetFilter };

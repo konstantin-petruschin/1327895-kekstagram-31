@@ -4,6 +4,7 @@ import './form.js';
 import './slider.js';
 import { getErrorMessage } from './util.js';
 import { getData } from './api.js';
+import { initUploadModal, setFormSubmit } from './form.js';
 
 try {
   const photos = await getData();
@@ -12,4 +13,7 @@ try {
 } catch (error) {
   getErrorMessage(error.message);
 }
+
+setFormSubmit();
+initUploadModal();
 
