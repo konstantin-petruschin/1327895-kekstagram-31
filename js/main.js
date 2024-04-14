@@ -16,9 +16,7 @@ async function bootstrappApp() {
   }
 }
 
-
-setFormSubmit();
-initUploadModal();
 bootstrappApp();
 onFileInputChange();
-
+setFormSubmit();
+initUploadModal();

@@ -28,7 +28,7 @@ let errorMessage = '';
 const onFileInputChange = () => {
   const file = imageUploadInput.files[0];
   const fileName = file.name.toLowerCase();
-  const matches = FILE_TYPES.some((item) => fileName.endWith(item));
+  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
   if (matches) {
     const url = URL.createObjectURL(file);
     imgUploadPreview.src = url;
@@ -37,7 +37,6 @@ const onFileInputChange = () => {
     });
   }
 };
-
 
 const openUserModal = () => {
   imageUploadOverlay.classList.remove('hidden');
@@ -52,7 +51,7 @@ const openUserModal = () => {
 imageUploadInput.addEventListener ('change', openUserModal);
 
 const onPhotoEditorResetButtonClick = () => closePhotoEditor() ;
-const onDocunentKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if(isEscapeKey(evt)) {
     evt.preventDefault();
     if(document.activeElement === hashtagInput || document.activeElement === commentInput) {
@@ -67,7 +66,7 @@ const onDocunentKeydown = (evt) => {
 function closePhotoEditor () {
   imageUploadOverlay.classList.add('hidden');
   pageBody.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocunentKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
   imageUploadCancel.removeEventListener('click', onPhotoEditorResetButtonClick);
   imageUploadInput.value = '';
 }
@@ -77,7 +76,7 @@ const initUploadModal = () => {
     imageUploadOverlay.classList.remove('hidden');
     pageBody.classList.add('modal-open');
     imageUploadCancel.addEventListener('click', onPhotoEditorResetButtonClick);
-    document.addEventListener('keydown' , onDocunentKeydown);
+    document.addEventListener('keydown' , onDocumentKeydown);
     resetFilter();
   });
 };
