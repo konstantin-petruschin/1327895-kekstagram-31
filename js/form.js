@@ -141,7 +141,9 @@ const setFormSubmit = () => {
 
     const isValid = pristine.validate();
     if (isValid) {
-      blockSubmitButton();
+      hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
+      uploadForm.submit();
+      blockSubmitButton(); // нужно ли тут удалять пробелы?
       pristine.reset();
       sendData(new FormData(evt.target))
         .then(sendMessage)
