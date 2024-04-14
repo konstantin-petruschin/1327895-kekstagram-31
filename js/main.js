@@ -1,9 +1,19 @@
-import {similarPhoto} from './data.js';
 import {renderSimilarPhotoPostsArray} from './similar-posts.js';
 import {showBigPicture} from './user-modal.js';
-const similarPhotoPostsArray = similarPhoto();
 import './form.js';
 import './slider.js';
+import { getErrorMessage } from './util.js';
+import { getData } from './api.js';
+import { initUploadModal, setFormSubmit } from './form.js';
 
-renderSimilarPhotoPostsArray(similarPhotoPostsArray);
-showBigPicture(similarPhotoPostsArray);
+try {
+  const photos = await getData();
+  renderSimilarPhotoPostsArray(photos);
+  showBigPicture(photos);
+} catch (error) {
+  getErrorMessage(error.message);
+}
+
+setFormSubmit();
+initUploadModal();
+

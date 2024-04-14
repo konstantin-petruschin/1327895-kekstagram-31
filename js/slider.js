@@ -1,5 +1,3 @@
-import { getEffectSelector } from './util.js';
-
 const SCALE_STEP = 0.25;
 const SCALE_MAX = 1;
 const SCALE_MIN = 0.25;
@@ -9,15 +7,14 @@ const uploadForm = document.querySelector('.img-upload__form');
 const reduce = uploadForm.querySelector('.scale__control--smaller');
 const increase = uploadForm.querySelector('.scale__control--bigger');
 
-const imgUploadPreview = uploadForm.querySelector('.img-upload__preview img'); // preview
+const imgUploadPreview = uploadForm.querySelector('.img-upload__preview img');
 const scaleControlValue = uploadForm.querySelector('.scale__control--value');
-const effectLevel = uploadForm.querySelector('.img-upload__effect-level'); // sliderContainer
+const effectLevel = uploadForm.querySelector('.img-upload__effect-level');
 const effectLevelValue = uploadForm.querySelector('.effect-level__value');
 effectLevelValue.value = EFFECT_MAX_LEVEL;
 const imgUploadWrapper = document.querySelector('.img-upload__wrapper');
-const effectLevelSlider = imgUploadWrapper.querySelector('.effect-level__slider'); // effectSlider
+const effectLevelSlider = imgUploadWrapper.querySelector('.effect-level__slider');
 const effectRadio = uploadForm.querySelectorAll('.effects__radio');
-const selectorImg = imgUploadPreview.classList;
 
 let scale = 1;
 
@@ -86,7 +83,7 @@ const StyleFilterByEffects = {
   chrome: getChromeStyleFilter,
   sepia: getSepiaStyleFilter,
   marvin: getMarvineStyleFilter,
-  blur: getPhobosStyleFilter,
+  phobos: getPhobosStyleFilter,
   heat: getHeatStyleFilter
 };
 
@@ -95,18 +92,17 @@ const getSliderUpdate = (effect, sliderElement) => {
 };
 
 const resetFilter = () => {
-  imgUploadPreview.computedStyleMap.removeProperty('filter');
+  imgUploadPreview.style.filter = '';
   effectLevel.classList.add ('hidden');
-  imgUploadPreview.classList.replace(selectorImg, 'effect__preview-none');
 };
 
-effectLevelSlider.noUiSlider.on('update', () =>{
+effectLevelSlider.noUiSlider.on('update', () => {
   effectLevelValue.value = effectLevelSlider.noUiSlider.get();
   effectRadio.forEach((item) => {
     if(item.checked) {
       if(item.value !== 'none') {
         effectLevel.classList.remove('hidden');
-        imgUploadPreview.computedStyleMap.filter = StyleFilterByEffects[item.value](effectLevelValue.value);
+        imgUploadPreview.style.filter = StyleFilterByEffects[item.value](effectLevelValue.value);
       } else {
         resetFilter();
       }
@@ -118,7 +114,6 @@ const onEffectRadioButtonClick = (evt) => {
   const currentRadioButton = evt.target.closest('.effects__radio');
   if(currentRadioButton) {
     const effectButtonValue = currentRadioButton.value;
-    imgUploadPreview.classList.replace(selectorImg, getEffectSelector(effectButtonValue));
     getSliderUpdate(effectButtonValue, effectLevelSlider);
   }
 };
@@ -138,8 +133,10 @@ const onIncreaseClick = () => {
     imgUploadPreview.style.transform = `scale(${scale})`;
     scaleControlValue.value = `${scale * 100}%`;
   }
-}; // должно ли быть ограничение размера картинки???
+};
 
 reduce.addEventListener('click', onReduceClick);
-increase.addEventListener('click', onIncreaseClick); // change
+increase.addEventListener('click', onIncreaseClick);
 effectRadio.forEach((radio) => radio.addEventListener('change', onEffectRadioButtonClick));
+
+export { resetFilter };
