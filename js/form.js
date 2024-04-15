@@ -41,7 +41,7 @@ const onFileInputChange = () => {
 const openUserModal = () => {
   imageUploadOverlay.classList.remove('hidden');
   pageBody.classList.add('modal-open');
-
+  onFileInputChange();
   imageUploadCancel.addEventListener('click', () => {
     imageUploadOverlay.classList.add('hidden');
     pageBody.classList.remove('modal-open');
@@ -157,8 +157,8 @@ const setFormSubmit = () => {
 
     const isValid = pristine.validate();
     if (isValid) {
-      hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-      uploadForm.submit();
+      // hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
+      // uploadForm.submit();
       blockSubmitButton(); // нужно ли тут удалять пробелы?
       pristine.reset();
       sendData(new FormData(evt.target))

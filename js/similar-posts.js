@@ -3,6 +3,7 @@ const picturesContainer = document.querySelector('.pictures');
 const listFragmentPhoto = document.createDocumentFragment();
 
 const renderSimilarPhotoPostsArray = (similarPhotoPostsArray) => {
+  picturesContainer.innerHTML = '';
   similarPhotoPostsArray.forEach((photo) => {
     const pictureElement = picturesTemplate.cloneNode(true);
     const pictureImg = pictureElement.querySelector('.picture__img');
