@@ -4,6 +4,7 @@ import { resetFilter } from './slider.js';
 
 const MAX_COUNT_HASHTAGS = 5;
 const MAX_LENGTH_COMMENT = 140;
+const FILE_TYPES = ['.jpg', '.jpeg', '.png', '.gif', '.jfif'];
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -16,16 +17,31 @@ const imageUploadInput = uploadForm.querySelector('.img-upload__input');
 const imageUploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 const imageUploadCancel = uploadForm.querySelector('.img-upload__cancel');
 const submitButton = document.querySelector('.img-upload__submit');
+const imgUploadPreview = uploadForm.querySelector('.img-upload__preview img');
+const uploadPreviewEffects = document.querySelectorAll('.effects__preview');
 
 const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 
 let errorMessage = '';
 
+const onFileInputChange = () => {
+  const file = imageUploadInput.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((item) => fileName.endsWith(item));
+  if (matches) {
+    const url = URL.createObjectURL(file);
+    imgUploadPreview.src = url;
+    uploadPreviewEffects.forEach((item) => {
+      item.style.backgroundImage = `url(${url})`;
+    });
+  }
+};
+
 const openUserModal = () => {
   imageUploadOverlay.classList.remove('hidden');
   pageBody.classList.add('modal-open');
-
+  onFileInputChange();
   imageUploadCancel.addEventListener('click', () => {
     imageUploadOverlay.classList.add('hidden');
     pageBody.classList.remove('modal-open');
@@ -35,7 +51,7 @@ const openUserModal = () => {
 imageUploadInput.addEventListener ('change', openUserModal);
 
 const onPhotoEditorResetButtonClick = () => closePhotoEditor() ;
-const onDocunentKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if(isEscapeKey(evt)) {
     evt.preventDefault();
     if(document.activeElement === hashtagInput || document.activeElement === commentInput) {
@@ -50,7 +66,7 @@ const onDocunentKeydown = (evt) => {
 function closePhotoEditor () {
   imageUploadOverlay.classList.add('hidden');
   pageBody.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocunentKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
   imageUploadCancel.removeEventListener('click', onPhotoEditorResetButtonClick);
   imageUploadInput.value = '';
 }
@@ -60,7 +76,7 @@ const initUploadModal = () => {
     imageUploadOverlay.classList.remove('hidden');
     pageBody.classList.add('modal-open');
     imageUploadCancel.addEventListener('click', onPhotoEditorResetButtonClick);
-    document.addEventListener('keydown' , onDocunentKeydown);
+    document.addEventListener('keydown' , onDocumentKeydown);
     resetFilter();
   });
 };
@@ -141,8 +157,8 @@ const setFormSubmit = () => {
 
     const isValid = pristine.validate();
     if (isValid) {
-      hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-      uploadForm.submit();
+      // hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
+      // uploadForm.submit();
       blockSubmitButton(); // нужно ли тут удалять пробелы?
       pristine.reset();
       sendData(new FormData(evt.target))
@@ -157,4 +173,4 @@ const setFormSubmit = () => {
   });
 };
 
-export { initUploadModal, setFormSubmit };
+export { initUploadModal, setFormSubmit, onFileInputChange};

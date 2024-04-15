@@ -43,7 +43,6 @@ const sendErrorMessage = () => {
   });
 };
 
-
 const sendMessage = () => {
   const templateSendAlert = document.querySelector('#success').content.querySelector('.success');
   const newAlert = templateSendAlert.cloneNode(true);

@@ -1,4 +1,4 @@
-import { showBigPicture } from './user-modal.js';
+import { renderSimilarPhotoPostsArray } from './similar-posts.js';
 import { debounce } from './util.js';
 const MAX_PICTURES_COUNT = 10;
 
@@ -13,12 +13,12 @@ const SORTFUNC = {
   discussed: (a, b) => b.comments.length - a.comments.length
 };
 
-let currentFilter = 'filter-default';
+let currentFilter = FILTER.default;
 let pictures = [];
 const filterElement = document.querySelector('.img-filters');
 const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
 
-const debounceRender = debounce(showBigPicture);
+const debounceRender = debounce(renderSimilarPhotoPostsArray);
 
 function onFilterChange(evt) {
   const targetButton = evt.target;
@@ -43,7 +43,7 @@ function applyFilter() {
     filteredPictures = pictures;
   }
   if (currentFilter === FILTER.random) {
-    filteredPictures = pictures.toSorted(SORTFUNC.random()).slice(0, MAX_PICTURES_COUNT);
+    filteredPictures = pictures.toSorted(SORTFUNC.random).slice(0, MAX_PICTURES_COUNT);
   }
   if(currentFilter === FILTER.discussed){
     filteredPictures = pictures.toSorted(SORTFUNC.discussed);
@@ -52,7 +52,7 @@ function applyFilter() {
 }
 
 function configFilter(picturesData) {
-  filterElement.classList.remove('imf-filters--inactive');
+  filterElement.classList.remove('img-filters--inactive');
   filterElement.addEventListener('click', onFilterChange);
   pictures = picturesData;
 }
