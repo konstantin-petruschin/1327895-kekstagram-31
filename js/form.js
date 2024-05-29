@@ -24,6 +24,7 @@ const hashtagInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
 
 let errorMessage = '';
+let isSendingData = false;
 
 const onFileInputChange = () => {
   const file = imageUploadInput.files[0];
@@ -54,7 +55,7 @@ const onPhotoEditorResetButtonClick = () => closePhotoEditor() ;
 const onDocumentKeydown = (evt) => {
   if(isEscapeKey(evt)) {
     evt.preventDefault();
-    if(document.activeElement === hashtagInput || document.activeElement === commentInput) {
+    if(document.activeElement === hashtagInput || document.activeElement === commentInput || isSendingData) {
       evt.stopPropagation();
     } else {
       uploadForm.reset();
@@ -125,15 +126,6 @@ const isValidHashtags = (value) => {
   });
 };
 
-// const onFormSubmit = (evt) => {
-//   evt.preventDefault();
-//   if (pristine.validate()) {
-//     pristine.reset();
-//     hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-//     uploadForm.submit();
-//   }
-// };
-
 const checkLengthComment = (value) => value.length <= MAX_LENGTH_COMMENT;
 errorMessage = `Длина комментари больше ${MAX_LENGTH_COMMENT} символов`;
 
@@ -155,11 +147,15 @@ const setFormSubmit = () => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
+    if (isSendingData) {
+      return;
+    }
+
+    isSendingData = true;
+
     const isValid = pristine.validate();
     if (isValid) {
-      // hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-      // uploadForm.submit();
-      blockSubmitButton(); // нужно ли тут удалять пробелы?
+      blockSubmitButton();
       pristine.reset();
       sendData(new FormData(evt.target))
         .then(sendMessage)
