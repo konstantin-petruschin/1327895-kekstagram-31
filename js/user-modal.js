@@ -1,9 +1,18 @@
 import { isEscapeKey } from './util.js';
-import {renderComments, clearComments } from './render-comments.js';
+import { renderComments, clearComments } from './render-comments.js';
 
 const bigPictureElement = document.querySelector('.big-picture');
 const allPictureElement = document.querySelector('.pictures');
 const userPictureCloseElement = document.querySelector('.big-picture__cancel');
+
+const handleEscapeKeyPress = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    bigPictureElement.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    document.removeEventListener('keydown', handleEscapeKeyPress);
+  }
+};
 
 const showBigPicture = (photoPosts) => {
   allPictureElement.addEventListener('click', (evt) => {
@@ -20,6 +29,8 @@ const showBigPicture = (photoPosts) => {
       bigPictureElement.querySelector('.social__caption').textContent = photo.description;
 
       document.body.classList.add('modal-open');
+
+      document.addEventListener('keydown', handleEscapeKeyPress);
     }
   });
 };
@@ -27,14 +38,7 @@ const showBigPicture = (photoPosts) => {
 userPictureCloseElement.addEventListener('click', () => {
   bigPictureElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
-});
-
-document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    bigPictureElement.classList.add('hidden');
-    document.body.classList.remove('modal-open');
-  }
+  document.removeEventListener('keydown', handleEscapeKeyPress);
 });
 
 export { showBigPicture };
