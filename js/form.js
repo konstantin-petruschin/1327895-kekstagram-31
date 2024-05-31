@@ -80,7 +80,7 @@ function closePhotoEditor () {
 }
 
 const initUploadModal = () => {
-  imageUploadInput.addEventListener('change', () =>{
+  imageUploadInput.addEventListener('change', () => {
     imageUploadOverlay.classList.remove('hidden');
     pageBody.classList.add('modal-open');
     imageUploadCancel.addEventListener('click', onPhotoEditorResetButtonClick);

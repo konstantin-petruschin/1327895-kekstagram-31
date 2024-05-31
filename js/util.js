@@ -2,18 +2,14 @@ const REMOVE_MESSAGE_TIMEOUT = 5000;
 const DEBOUNCE_DELAY = 500;
 
 const errorLoadDataTemplate = document.querySelector('#data-error').content;
-
 const body = document.body;
 
-const getErrorMessage = (message) => {
-  const errorArea = errorLoadDataTemplate.cloneNode(true);
-  if (message) {
-    errorArea.querySelector('.data-error__title').textContent = message;
-  }
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
+const getErrorMessage = () => {
+  const errorArea = errorLoadDataTemplate.cloneNode(true);
   body.append(errorArea);
   const errorLoadDataArea = body.querySelector('.data-error');
-
 
   setTimeout(() => {
     errorLoadDataArea.remove();
@@ -26,21 +22,36 @@ const sendErrorMessage = () => {
   document.body.appendChild(newAlert);
   const buttonAlert = document.body.querySelector('.error__button');
   const containerAlert = document.body.querySelector('.error__inner');
-  buttonAlert.addEventListener('click', () => {
+
+  const handleButtonClick = () => {
     newAlert.remove();
-  });
+    buttonAlert.removeEventListener('click', handleButtonClick);
+  };
+  buttonAlert.addEventListener('click', handleButtonClick);
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' && (evt.target !== newAlert)) {
+  const keyDownHandler = (evt) => {
+    if (isEscapeKey(evt) && (evt.target !== newAlert)) {
       newAlert.remove();
+      document.removeEventListener('keydown', keyDownHandler);
     }
-  });
+  };
+  document.addEventListener('keydown', keyDownHandler);
 
-  document.addEventListener('click', (evt) => {
+  const clickHandler = (evt) => {
     if (evt.target !== containerAlert) {
       newAlert.remove();
     }
-  });
+  };
+  document.addEventListener('click', clickHandler);
+
+
+  const removeEventListeners = () => {
+    buttonAlert.removeEventListener('click', handleButtonClick);
+    document.removeEventListener('keydown', keyDownHandler);
+    document.removeEventListener('click', clickHandler);
+  };
+
+  return removeEventListeners;
 };
 
 const sendMessage = () => {
@@ -49,24 +60,36 @@ const sendMessage = () => {
   document.body.appendChild(newAlert);
   const buttonAlert = document.body.querySelector('.success__button');
   const containerAlert = document.body.querySelector('.success__inner');
-  buttonAlert.addEventListener('click', () => {
+
+  const handleButtonClick = () => {
     newAlert.remove();
-  });
+    buttonAlert.removeEventListener('click', handleButtonClick);
+  };
+  buttonAlert.addEventListener('click', handleButtonClick);
 
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape' && (evt.target !== newAlert)) {
+  const keyDownHandler = (evt) => {
+    if (isEscapeKey(evt) && (evt.target !== newAlert)) {
       newAlert.remove();
+      document.removeEventListener('keydown', keyDownHandler);
     }
-  });
+  };
+  document.addEventListener('keydown', keyDownHandler);
 
-  document.addEventListener('click', (evt) => {
+  const clickHandler = (evt) => {
     if (evt.target !== containerAlert) {
       newAlert.remove();
     }
-  });
-};
+  };
+  document.addEventListener('click', clickHandler);
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+  const removeEventListeners = () => {
+    buttonAlert.removeEventListener('click', handleButtonClick);
+    document.removeEventListener('keydown', keyDownHandler);
+    document.removeEventListener('click', clickHandler);
+  };
+
+  return removeEventListeners;
+};
 
 const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
