@@ -5,7 +5,7 @@ import { getData } from './api.js';
 import { initUploadModal, setFormSubmit } from './form.js';
 import { configFilter } from './filter.js';
 
-async function bootstrappApp() {
+const bootstrappApp = async () => {
   try {
     const photos = await getData();
     renderSimilarPhotoPostsArray(photos);
@@ -14,7 +14,7 @@ async function bootstrappApp() {
   } catch (error) {
     getErrorMessage(error.message);
   }
-}
+};
 
 bootstrappApp();
 setFormSubmit();
