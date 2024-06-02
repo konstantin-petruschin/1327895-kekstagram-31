@@ -25,31 +25,31 @@ const sendErrorMessage = () => {
 
   const handleButtonClick = () => {
     newAlert.remove();
-    buttonAlert.removeEventListener('click', handleButtonClick);
+    removeEventListeners();
   };
   buttonAlert.addEventListener('click', handleButtonClick);
 
   const keyDownHandler = (evt) => {
-    if (isEscapeKey(evt) && (evt.target !== newAlert)) {
+    if (isEscapeKey(evt) || (evt.target === newAlert)) {
       newAlert.remove();
-      document.removeEventListener('keydown', keyDownHandler);
+      removeEventListeners();
     }
   };
   document.addEventListener('keydown', keyDownHandler);
 
-  const clickHandler = (evt) => {
-    if (evt.target !== containerAlert) {
-      newAlert.remove();
-    }
-  };
-  document.addEventListener('click', clickHandler);
-
-
-  const removeEventListeners = () => {
+  function removeEventListeners () {
     buttonAlert.removeEventListener('click', handleButtonClick);
     document.removeEventListener('keydown', keyDownHandler);
     document.removeEventListener('click', clickHandler);
-  };
+  }
+
+  function clickHandler (evt) {
+    if (evt.target !== containerAlert) {
+      newAlert.remove();
+      removeEventListeners();
+    }
+  }
+  document.addEventListener('click', clickHandler);
 
   return removeEventListeners;
 };
@@ -63,30 +63,32 @@ const sendMessage = () => {
 
   const handleButtonClick = () => {
     newAlert.remove();
-    buttonAlert.removeEventListener('click', handleButtonClick);
+    removeEventListeners();
   };
   buttonAlert.addEventListener('click', handleButtonClick);
-
-  const keyDownHandler = (evt) => {
-    if (isEscapeKey(evt) && (evt.target !== newAlert)) {
-      newAlert.remove();
-      document.removeEventListener('keydown', keyDownHandler);
-    }
-  };
-  document.addEventListener('keydown', keyDownHandler);
 
   const clickHandler = (evt) => {
     if (evt.target !== containerAlert) {
       newAlert.remove();
+      removeEventListeners();
     }
   };
   document.addEventListener('click', clickHandler);
 
-  const removeEventListeners = () => {
+  function removeEventListeners () {
     buttonAlert.removeEventListener('click', handleButtonClick);
     document.removeEventListener('keydown', keyDownHandler);
     document.removeEventListener('click', clickHandler);
-  };
+  }
+
+  function keyDownHandler (evt) {
+    if (isEscapeKey(evt) || (evt.target === newAlert)) {
+      newAlert.remove();
+      removeEventListeners();
+    }
+  }
+  document.addEventListener('keydown', keyDownHandler);
+
 
   return removeEventListeners;
 };

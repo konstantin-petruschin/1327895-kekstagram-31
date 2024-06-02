@@ -54,7 +54,7 @@ const onPhotoEditorResetButtonClick = () => closePhotoEditor() ;
 const onDocumentKeydown = (evt) => {
   if(isEscapeKey(evt)) {
     evt.preventDefault();
-    const isSendingData = document.querySelector('error');
+    const isSendingData = document.querySelector('.error');
     if(document.activeElement === hashtagInput || document.activeElement === commentInput || isSendingData) {
       evt.stopPropagation();
     } else {
