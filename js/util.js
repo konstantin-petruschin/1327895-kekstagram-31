@@ -50,8 +50,6 @@ const sendErrorMessage = () => {
     }
   }
   document.addEventListener('click', clickHandler);
-
-  return removeEventListeners;
 };
 
 const sendMessage = () => {
@@ -88,9 +86,6 @@ const sendMessage = () => {
     }
   }
   document.addEventListener('keydown', keyDownHandler);
-
-
-  return removeEventListeners;
 };
 
 const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
