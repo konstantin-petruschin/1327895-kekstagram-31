@@ -58,7 +58,6 @@ const onDocumentKeydown = (evt) => {
     if(document.activeElement === hashtagInput || document.activeElement === commentInput || isSendingData) {
       evt.stopPropagation();
     } else {
-      uploadForm.reset();
       closePhotoEditor();
     }
   }
@@ -77,6 +76,8 @@ function closePhotoEditor () {
   imageUploadCancel.removeEventListener('click', onPhotoEditorResetButtonClick);
   imageUploadInput.value = '';
   pristine.reset();
+  uploadForm.reset();
+  imgUploadPreview.style.transform = '';
 }
 
 const initUploadModal = () => {
